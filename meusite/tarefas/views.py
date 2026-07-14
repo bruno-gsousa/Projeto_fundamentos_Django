@@ -1,10 +1,12 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from .forms import TarefaForm
+from .models import TarefaModel
 # Create your views here.
 
 def tarefas_home(request):
     contexto = {
-        'nome': 'Bruno'
+        'nome': 'Bruno',
+        "tarefas": TarefaModel.objects.all()
     }
     return render(request, 'pagetarefas/home.html', contexto)
 
@@ -19,3 +21,8 @@ def tarefas_adicionar(request):
     }
     
     return render(request, 'pagetarefas/adicionar.html',contexto)
+
+def tarefas_remover(request,id):
+    tarefa = get_object_or_404(TarefaModel,id=id)
+    tarefa.delete()
+    return redirect("tarefas:home")
